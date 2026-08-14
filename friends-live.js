@@ -392,8 +392,17 @@ async function refreshLiveFriends() {
             "#friends-list"
         );
 
+    const dashboardFriendsList =
+        document.querySelector(
+            "#dashboard-friends-list"
+        );
 
-    if (!friendsList) {
+
+    // Nothing to render anywhere
+    if (
+        !friendsList &&
+        !dashboardFriendsList
+    ) {
         return;
     }
 
@@ -402,23 +411,46 @@ async function refreshLiveFriends() {
         await getFriendIds();
 
 
+    // ==========================================
+    // NO FRIENDS
+    // ==========================================
+
     if (
         friendIds.length === 0
     ) {
 
-        friendsList.innerHTML = `
+        if (friendsList) {
 
-            <div class="friends-empty">
+            friendsList.innerHTML = `
 
-                You haven't added any friends yet.
+                <div class="friends-empty">
+                    You haven't added any friends yet.
+                </div>
 
-            </div>
+            `;
 
-        `;
+        }
+
+
+        if (dashboardFriendsList) {
+
+            dashboardFriendsList.innerHTML = `
+
+                <div class="friends-empty">
+                    No friends yet.
+                </div>
+
+            `;
+
+        }
 
         return;
     }
 
+
+    // ==========================================
+    // LOAD FRIEND DATA
+    // ==========================================
 
     const profiles =
         await getFriendProfiles(
@@ -444,7 +476,8 @@ async function refreshLiveFriends() {
 
 
     /*
-     * Load stats in parallel.
+     * Load all friend statistics
+     * in parallel.
      */
 
     const statsEntries =
@@ -473,9 +506,19 @@ async function refreshLiveFriends() {
         );
 
 
-    friendsList.innerHTML =
-        "";
+    // Clear both containers
+    if (friendsList) {
+        friendsList.innerHTML = "";
+    }
 
+    if (dashboardFriendsList) {
+        dashboardFriendsList.innerHTML = "";
+    }
+
+
+    // ==========================================
+    // RENDER EACH FRIEND
+    // ==========================================
 
     profiles.forEach(
         friend => {
@@ -515,134 +558,412 @@ async function refreshLiveFriends() {
                     friend.display_name ||
                     "S"
                 )
-                .charAt(0)
-                .toUpperCase();
+                    .charAt(0)
+                    .toUpperCase();
 
 
-            const card =
-                document.createElement(
-                    "div"
-                );
+            // ==================================
+            // EXISTING FRIENDS PAGE CARD
+            // ==================================
+
+            if (friendsList) {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
 
 
-            card.className =
-                "friend-card";
+                card.className =
+                    "friend-card";
 
 
-            card.dataset.friendId =
-                friend.id;
+                card.dataset.friendId =
+                    friend.id;
 
 
-            let subjectBreakdown =
-                [];
+                let subjectBreakdown =
+                    [];
 
 
-            try {
+                try {
 
-                subjectBreakdown =
-                    Array.isArray(
-                        stats.subject_breakdown
-                    )
+                    subjectBreakdown =
+                        Array.isArray(
+                            stats.subject_breakdown
+                        )
 
-                        ? stats.subject_breakdown
+                            ? stats.subject_breakdown
 
-                        : JSON.parse(
-                            stats.subject_breakdown ||
-                            "[]"
+                            : JSON.parse(
+                                stats.subject_breakdown ||
+                                "[]"
+                            );
+
+                } catch {
+
+                    subjectBreakdown =
+                        [];
+
+                }
+
+
+                const topSubjects =
+                    subjectBreakdown
+                        .slice(
+                            0,
+                            3
+                        )
+                        .map(
+                            item =>
+
+                                `
+                                    <span>
+                                        ${escapeHtml(
+                                            item.subject_name
+                                        )}
+                                        ${formatSecondsForFriend(
+                                            item.seconds
+                                        )}
+                                    </span>
+                                `
+                        )
+                        .join(
+                            " • "
                         );
 
-            } catch {
 
-                subjectBreakdown =
-                    [];
+                if (isActive) {
+
+                    card.innerHTML = `
+
+                        <div class="friend-main">
+
+                            <div class="friend-avatar">
+                                ${escapeHtml(
+                                    initial
+                                )}
+                            </div>
+
+
+                            <div>
+
+                                <div class="friend-name">
+                                    ${escapeHtml(
+                                        friend.display_name ||
+                                        "Student"
+                                    )}
+                                </div>
+
+
+                                <div class="friend-username">
+
+                                    ${
+                                        friend.username
+                                            ? "@" +
+                                              escapeHtml(
+                                                  friend.username
+                                              )
+                                            : ""
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="friend-status">
+
+                            <div
+                                class="friend-status-line online"
+                            >
+                                🟢 Studying
+                            </div>
+
+
+                            <div
+                                class="friend-status-detail"
+                            >
+                                ${escapeHtml(
+                                    session.subject_name ||
+                                    "Study session"
+                                )}
+                            </div>
+
+
+                            <div
+                                class="friend-status-detail live-duration"
+                                data-started-at="${session.started_at}"
+                            >
+                                ${formatLiveDuration(
+                                    session.started_at
+                                )}
+                            </div>
+
+                        </div>
+
+
+                        <div class="friend-stats">
+
+                            <div class="friend-stat">
+
+                                <div
+                                    class="friend-stat-label"
+                                >
+                                    Today
+                                </div>
+
+
+                                <div
+                                    class="friend-stat-value"
+                                >
+                                    ${formatSecondsForFriend(
+                                        stats.today_seconds
+                                    )}
+                                </div>
+
+                            </div>
+
+
+                            <div class="friend-stat">
+
+                                <div
+                                    class="friend-stat-label"
+                                >
+                                    This week
+                                </div>
+
+
+                                <div
+                                    class="friend-stat-value"
+                                >
+                                    ${formatSecondsForFriend(
+                                        stats.week_seconds
+                                    )}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        ${
+                            topSubjects
+                                ? `
+
+                                    <div
+                                        class="friend-subject-breakdown"
+                                    >
+                                        ${topSubjects}
+                                    </div>
+
+                                  `
+                                : ""
+                        }
+
+                    `;
+
+                } else {
+
+                    card.innerHTML = `
+
+                        <div class="friend-main">
+
+                            <div class="friend-avatar">
+                                ${escapeHtml(
+                                    initial
+                                )}
+                            </div>
+
+
+                            <div>
+
+                                <div class="friend-name">
+                                    ${escapeHtml(
+                                        friend.display_name ||
+                                        "Student"
+                                    )}
+                                </div>
+
+
+                                <div class="friend-username">
+
+                                    ${
+                                        friend.username
+                                            ? "@" +
+                                              escapeHtml(
+                                                  friend.username
+                                              )
+                                            : ""
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="friend-status">
+
+                            <div
+                                class="friend-status-line offline"
+                            >
+                                ⚪ Offline
+                            </div>
+
+
+                            <div
+                                class="friend-status-detail"
+                            >
+                                Not studying
+                            </div>
+
+                        </div>
+
+
+                        <div class="friend-stats">
+
+                            <div class="friend-stat">
+
+                                <div
+                                    class="friend-stat-label"
+                                >
+                                    Today
+                                </div>
+
+
+                                <div
+                                    class="friend-stat-value"
+                                >
+                                    ${formatSecondsForFriend(
+                                        stats.today_seconds
+                                    )}
+                                </div>
+
+                            </div>
+
+
+                            <div class="friend-stat">
+
+                                <div
+                                    class="friend-stat-label"
+                                >
+                                    This week
+                                </div>
+
+
+                                <div
+                                    class="friend-stat-value"
+                                >
+                                    ${formatSecondsForFriend(
+                                        stats.week_seconds
+                                    )}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        ${
+                            topSubjects
+                                ? `
+
+                                    <div
+                                        class="friend-subject-breakdown"
+                                    >
+                                        ${topSubjects}
+                                    </div>
+
+                                  `
+                                : ""
+                        }
+
+                    `;
+
+                }
+
+
+                friendsList.appendChild(
+                    card
+                );
 
             }
 
 
-            const topSubjects =
-                subjectBreakdown
-                    .slice(
-                        0,
-                        3
-                    )
-                    .map(
-                        item =>
 
-                            `
-                            <span>
-                                ${escapeHtml(
-                                    item.subject_name
-                                )}
-                                ${formatSecondsForFriend(
-                                    item.seconds
-                                )}
-                            </span>
-                            `
-                    )
-                    .join(
-                        " • "
+            // ==================================
+            // DASHBOARD FRIEND CARD
+            // ==================================
+
+            if (dashboardFriendsList) {
+
+                const dashboardCard =
+                    document.createElement(
+                        "div"
                     );
 
 
-            if (isActive) {
-
-                card.innerHTML = `
-
-                    <div class="friend-main">
-
-                        <div class="friend-avatar">
-
-                            ${escapeHtml(
-                                initial
-                            )}
-
-                        </div>
+                dashboardCard.className =
+                    "dashboard-friend-card";
 
 
-                        <div>
+                dashboardCard.dataset.friendId =
+                    friend.id;
 
-                            <div class="friend-name">
 
+                if (isActive) {
+
+                    dashboardCard.innerHTML = `
+
+                        <div class="dashboard-friend-header">
+
+                            <div class="dashboard-friend-avatar">
                                 ${escapeHtml(
-                                    friend.display_name ||
-                                    "Student"
+                                    initial
                                 )}
-
                             </div>
 
 
-                            <div class="friend-username">
+                            <div class="dashboard-friend-identity">
 
-                                ${
-                                    friend.username
-                                        ? "@" +
-                                          escapeHtml(
-                                              friend.username
-                                          )
-                                        : ""
-                                }
+                                <div class="dashboard-friend-name">
+                                    ${escapeHtml(
+                                        friend.display_name ||
+                                        "Student"
+                                    )}
+                                </div>
+
+
+                                <div class="dashboard-friend-username">
+
+                                    ${
+                                        friend.username
+                                            ? "@" +
+                                              escapeHtml(
+                                                  friend.username
+                                              )
+                                            : ""
+                                    }
+
+                                </div>
 
                             </div>
 
                         </div>
 
-                    </div>
 
-
-                    <div class="friend-status">
-
-                        <div
-                            class="friend-status-line online"
-                        >
+                        <div class="dashboard-friend-status online">
 
                             🟢 Studying
 
                         </div>
 
 
-                        <div
-                            class="friend-status-detail"
-                        >
+                        <div class="dashboard-friend-subject">
 
                             ${escapeHtml(
                                 session.subject_name ||
@@ -653,216 +974,148 @@ async function refreshLiveFriends() {
 
 
                         <div
-                            class="friend-status-detail live-duration"
+                            class="dashboard-friend-live-duration live-duration"
                             data-started-at="${session.started_at}"
                         >
-
                             ${formatLiveDuration(
                                 session.started_at
                             )}
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="friend-stats">
-
-                        <div class="friend-stat">
-
-                            <div
-                                class="friend-stat-label"
-                            >
-                                Today
-                            </div>
-
-
-                            <div
-                                class="friend-stat-value"
-                            >
-
-                                ${formatSecondsForFriend(
-                                    stats.today_seconds
-                                )}
-
-                            </div>
-
                         </div>
 
 
-                        <div class="friend-stat">
+                        <div class="dashboard-friend-times">
 
-                            <div
-                                class="friend-stat-label"
-                            >
-                                This week
-                            </div>
+                            <div class="dashboard-friend-time">
 
-
-                            <div
-                                class="friend-stat-value"
-                            >
-
-                                ${formatSecondsForFriend(
-                                    stats.week_seconds
-                                )}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    ${
-                        topSubjects
-                            ? `
-                                <div
-                                    class="friend-subject-breakdown"
-                                >
-                                    ${topSubjects}
+                                <div class="dashboard-friend-time-label">
+                                    Today
                                 </div>
-                              `
-                            : ""
-                    }
 
-                `;
+                                <div class="dashboard-friend-time-value">
+                                    ${formatSecondsForFriend(
+                                        stats.today_seconds
+                                    )}
+                                </div>
 
-            } else {
+                            </div>
 
-                card.innerHTML = `
 
-                    <div class="friend-main">
+                            <div class="dashboard-friend-time">
 
-                        <div class="friend-avatar">
+                                <div class="dashboard-friend-time-label">
+                                    This week
+                                </div>
 
-                            ${escapeHtml(
-                                initial
-                            )}
+                                <div class="dashboard-friend-time-value">
+                                    ${formatSecondsForFriend(
+                                        stats.week_seconds
+                                    )}
+                                </div>
+
+                            </div>
 
                         </div>
 
+                    `;
 
-                        <div>
+                } else {
 
-                            <div class="friend-name">
+                    dashboardCard.innerHTML = `
 
+                        <div class="dashboard-friend-header">
+
+                            <div class="dashboard-friend-avatar">
                                 ${escapeHtml(
-                                    friend.display_name ||
-                                    "Student"
+                                    initial
                                 )}
-
                             </div>
 
 
-                            <div class="friend-username">
+                            <div class="dashboard-friend-identity">
 
-                                ${
-                                    friend.username
-                                        ? "@" +
-                                          escapeHtml(
-                                              friend.username
-                                          )
-                                        : ""
-                                }
+                                <div class="dashboard-friend-name">
+                                    ${escapeHtml(
+                                        friend.display_name ||
+                                        "Student"
+                                    )}
+                                </div>
+
+
+                                <div class="dashboard-friend-username">
+
+                                    ${
+                                        friend.username
+                                            ? "@" +
+                                              escapeHtml(
+                                                  friend.username
+                                              )
+                                            : ""
+                                    }
+
+                                </div>
 
                             </div>
 
                         </div>
 
-                    </div>
 
-
-                    <div class="friend-status">
-
-                        <div
-                            class="friend-status-line offline"
-                        >
+                        <div class="dashboard-friend-status offline">
 
                             ⚪ Offline
 
                         </div>
 
 
-                        <div
-                            class="friend-status-detail"
-                        >
+                        <div class="dashboard-friend-subject">
 
                             Not studying
 
                         </div>
 
-                    </div>
 
+                        <div class="dashboard-friend-times">
 
-                    <div class="friend-stats">
+                            <div class="dashboard-friend-time">
 
-                        <div class="friend-stat">
-
-                            <div
-                                class="friend-stat-label"
-                            >
-                                Today
-                            </div>
-
-
-                            <div
-                                class="friend-stat-value"
-                            >
-
-                                ${formatSecondsForFriend(
-                                    stats.today_seconds
-                                )}
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="friend-stat">
-
-                            <div
-                                class="friend-stat-label"
-                            >
-                                This week
-                            </div>
-
-
-                            <div
-                                class="friend-stat-value"
-                            >
-
-                                ${formatSecondsForFriend(
-                                    stats.week_seconds
-                                )}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    ${
-                        topSubjects
-                            ? `
-                                <div
-                                    class="friend-subject-breakdown"
-                                >
-                                    ${topSubjects}
+                                <div class="dashboard-friend-time-label">
+                                    Today
                                 </div>
-                              `
-                            : ""
-                    }
 
-                `;
+                                <div class="dashboard-friend-time-value">
+                                    ${formatSecondsForFriend(
+                                        stats.today_seconds
+                                    )}
+                                </div>
+
+                            </div>
+
+
+                            <div class="dashboard-friend-time">
+
+                                <div class="dashboard-friend-time-label">
+                                    This week
+                                </div>
+
+                                <div class="dashboard-friend-time-value">
+                                    ${formatSecondsForFriend(
+                                        stats.week_seconds
+                                    )}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                dashboardFriendsList.appendChild(
+                    dashboardCard
+                );
 
             }
-
-
-            friendsList.appendChild(
-                card
-            );
 
         }
     );

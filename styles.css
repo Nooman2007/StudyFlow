@@ -2160,3 +2160,227 @@ button {
     }
 
 }
+
+/* ==========================================
+   DASHBOARD 75 / 25 LAYOUT
+========================================== */
+
+.dashboard-main-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(250px, 1fr);
+    gap: 18px;
+    align-items: start;
+    margin-bottom: 34px;
+}
+
+.dashboard-stats-column {
+    min-width: 0;
+}
+
+.dashboard-friends-column {
+    min-width: 0;
+}
+
+.dashboard-main-grid .summary-grid {
+    margin-bottom: 18px;
+}
+
+.dashboard-main-grid .summary-card {
+    padding: 18px;
+}
+
+.dashboard-main-grid .summary-label {
+    font-size: 12px;
+}
+
+.dashboard-main-grid .summary-value {
+    font-size: 21px;
+}
+
+.dashboard-main-grid .timer-card {
+    margin-bottom: 22px;
+    padding: 30px 24px;
+}
+
+.dashboard-main-grid .timer {
+    font-size: 54px;
+    margin-bottom: 20px;
+}
+
+.dashboard-main-grid .subjects {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.dashboard-main-grid .subject {
+    padding: 17px;
+}
+
+.dashboard-friends-column > .section-header {
+    margin-bottom: 12px;
+}
+
+.dashboard-friends-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.dashboard-friend-card {
+    background: #181b24;
+    border-radius: 15px;
+    padding: 14px;
+    min-width: 0;
+}
+
+.dashboard-friend-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    margin-bottom: 12px;
+}
+
+.dashboard-friend-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #2b3240;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.dashboard-friend-identity {
+    min-width: 0;
+}
+
+.dashboard-friend-name {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dashboard-friend-username {
+    color: #8991a4;
+    font-size: 10px;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dashboard-friend-status {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.dashboard-friend-status.online {
+    color: #8fbc9d;
+}
+
+.dashboard-friend-status.offline {
+    color: #8991a4;
+}
+
+.dashboard-friend-subject {
+    color: #aeb6c8;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dashboard-friend-live-duration {
+    color: #8991a4;
+    font-size: 10px;
+    margin-top: 3px;
+}
+
+.dashboard-friend-times {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 11px;
+}
+
+.dashboard-friend-time {
+    background: #202530;
+    border-radius: 8px;
+    padding: 7px 8px;
+    min-width: 0;
+}
+
+.dashboard-friend-time-label {
+    color: #8991a4;
+    font-size: 8px;
+    margin-bottom: 2px;
+}
+
+.dashboard-friend-time-value {
+    color: #dce2ec;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+/* ==========================================
+   DASHBOARD RESPONSIVE
+========================================== */
+
+@media (max-width: 1100px) {
+
+    .dashboard-main-grid {
+        grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+    }
+
+    .dashboard-main-grid .summary-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .dashboard-main-grid .summary-card {
+        padding: 15px;
+    }
+
+    .dashboard-main-grid .summary-value {
+        font-size: 18px;
+    }
+
+    .dashboard-main-grid .timer {
+        font-size: 46px;
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .dashboard-main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-friends-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .dashboard-main-grid .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-friends-list {
+        grid-template-columns: 1fr;
+    }
+
+}

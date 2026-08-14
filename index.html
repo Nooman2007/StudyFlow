@@ -320,125 +320,180 @@
             </div>
 
 
-            <div class="summary-grid">
+            <!-- ==================================
+                 DASHBOARD MAIN 75 / 25 LAYOUT
+            =================================== -->
 
-                <div class="summary-card">
+            <div class="dashboard-main-grid">
 
-                    <div class="summary-label">
-                        Today's study time
+
+                <!-- ==================================
+                     LEFT SIDE - MY STUDY STATS
+                =================================== -->
+
+                <div class="dashboard-stats-column">
+
+
+                    <div class="summary-grid">
+
+                        <div class="summary-card">
+
+                            <div class="summary-label">
+                                Today's study time
+                            </div>
+
+                            <div
+                                class="summary-value"
+                                id="dashboard-total"
+                            >
+                                00:00:00
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-card">
+
+                            <div class="summary-label">
+                                This week
+                            </div>
+
+                            <div
+                                class="summary-value"
+                                id="dashboard-week"
+                            >
+                                00:00:00
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-card">
+
+                            <div class="summary-label">
+                                Daily average
+                            </div>
+
+                            <div
+                                class="summary-value"
+                                id="dashboard-average"
+                            >
+                                00:00:00
+                            </div>
+
+                        </div>
+
                     </div>
+
+
+
+                    <div class="timer-card">
+
+                        <div class="timer-label">
+                            Today's study time • 00:00:00
+                        </div>
+
+
+                        <div class="current-subject">
+                            No subject selected
+                        </div>
+
+
+                        <div class="timer">
+                            00:00:00
+                        </div>
+
+
+                        <div class="timer-buttons">
+
+                            <button class="start-button">
+                                Start Studying
+                            </button>
+
+
+                            <button class="pause-button">
+                                Pause
+                            </button>
+
+
+                            <button class="finish-button">
+                                Finish Session
+                            </button>
+
+                        </div>
+
+
+                        <button class="manual-button">
+                            + Add Study Time Manually
+                        </button>
+
+                    </div>
+
+
+
+                    <div class="section-header">
+
+                        <div class="section-title">
+                            My Subjects
+                        </div>
+
+
+                        <button
+                            class="add-subject-button"
+                            id="dashboard-add-subject"
+                        >
+                            + Add Subject
+                        </button>
+
+                    </div>
+
 
                     <div
-                        class="summary-value"
-                        id="dashboard-total"
-                    >
-                        00:00:00
-                    </div>
+                        class="subjects"
+                        id="subject-list"
+                    ></div>
+
 
                 </div>
 
 
-                <div class="summary-card">
 
-                    <div class="summary-label">
-                        This week
+                <!-- ==================================
+                     RIGHT SIDE - FRIENDS
+                =================================== -->
+
+                <div class="dashboard-friends-column">
+
+                    <div class="section-header">
+
+                        <div class="section-title">
+                            Friends
+                        </div>
+
                     </div>
 
+
                     <div
-                        class="summary-value"
-                        id="dashboard-week"
+                        class="dashboard-friends-list"
+                        id="dashboard-friends-list"
                     >
-                        00:00:00
+
+                        <div class="friends-empty">
+                            Loading friends...
+                        </div>
+
                     </div>
 
                 </div>
 
-
-                <div class="summary-card">
-
-                    <div class="summary-label">
-                        Daily average
-                    </div>
-
-                    <div
-                        class="summary-value"
-                        id="dashboard-average"
-                    >
-                        00:00:00
-                    </div>
-
-                </div>
 
             </div>
 
 
 
-            <div class="timer-card">
-
-                <div class="timer-label">
-                    Today's study time • 00:00:00
-                </div>
-
-
-                <div class="current-subject">
-                    No subject selected
-                </div>
-
-
-                <div class="timer">
-                    00:00:00
-                </div>
-
-
-                <div class="timer-buttons">
-
-                    <button class="start-button">
-                        Start Studying
-                    </button>
-
-
-                    <button class="pause-button">
-                        Pause
-                    </button>
-
-
-                    <button class="finish-button">
-                        Finish Session
-                    </button>
-
-                </div>
-
-
-                <button class="manual-button">
-                    + Add Study Time Manually
-                </button>
-
-            </div>
-
-
-
-            <div class="section-header">
-
-                <div class="section-title">
-                    My Subjects
-                </div>
-
-
-                <button
-                    class="add-subject-button"
-                    id="dashboard-add-subject"
-                >
-                    + Add Subject
-                </button>
-
-            </div>
-
-
-            <div
-                class="subjects"
-                id="subject-list"
-            ></div>
-
+            <!-- ==================================
+                 RECENT STUDY DAYS
+            =================================== -->
 
             <div class="history-section">
 
