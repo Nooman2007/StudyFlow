@@ -1,0 +1,33 @@
+{
+  "name": "studyflow",
+  "version": "1.5.0",
+  "description": "A desktop study tracker",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "keywords": [
+    "study",
+    "productivity",
+    "student"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^43.0.0",
+    "electron-builder": "^26.0.20"
+  },
+  "build": {
+    "appId": "com.studyflow.app",
+    "productName": "StudyFlow",
+    "win": {
+      "target": "nsis"
+    }
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.112.3",
+    "electron-updater": "^6.8.9"
+  }
+}

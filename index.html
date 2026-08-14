@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>StudyFlow</title>
+
+    <link
+        rel="stylesheet"
+        href="styles.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- ==========================================
+     AUTH SCREEN
+=========================================== -->
+
+<div
+    class="auth-screen"
+    id="auth-screen"
+>
+
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            StudyFlow
+        </div>
+
+
+        <div
+            class="auth-login-form"
+            id="auth-login-form"
+        >
+
+            <h1>
+                Welcome back
+            </h1>
+
+            <p>
+                Log in to continue studying.
+            </p>
+
+
+            <label for="login-email">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="login-email"
+                placeholder="you@example.com"
+                autocomplete="email"
+            >
+
+
+            <label for="login-password">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="login-password"
+                placeholder="Your password"
+                autocomplete="current-password"
+            >
+
+
+            <div
+                class="auth-error"
+                id="login-error"
+            ></div>
+
+
+            <button
+                class="auth-primary-button"
+                id="login-button"
+            >
+                Log In
+            </button>
+
+
+            <div class="auth-switch">
+
+                Don't have an account?
+
+                <button
+                    class="auth-link"
+                    id="show-signup"
+                >
+                    Create one
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="auth-signup-form"
+            id="auth-signup-form"
+            style="display: none;"
+        >
+
+            <h1>
+                Create your account
+            </h1>
+
+            <p>
+                Let's get StudyFlow ready for you.
+            </p>
+
+
+            <label for="signup-display-name">
+                Display name
+            </label>
+
+            <input
+                type="text"
+                id="signup-display-name"
+                placeholder="Nooman"
+                maxlength="40"
+                autocomplete="name"
+            >
+
+
+            <label for="signup-username">
+                Username
+            </label>
+
+            <input
+                type="text"
+                id="signup-username"
+                placeholder="nooman"
+                maxlength="20"
+                autocomplete="username"
+            >
+
+
+            <label for="signup-email">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="signup-email"
+                placeholder="you@example.com"
+                autocomplete="email"
+            >
+
+
+            <label for="signup-password">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="signup-password"
+                placeholder="At least 6 characters"
+                autocomplete="new-password"
+            >
+
+
+            <div
+                class="auth-error"
+                id="signup-error"
+            ></div>
+
+
+            <button
+                class="auth-primary-button"
+                id="signup-button"
+            >
+                Create Account
+            </button>
+
+
+            <div class="auth-switch">
+
+                Already have an account?
+
+                <button
+                    class="auth-link"
+                    id="show-login"
+                >
+                    Log in
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==========================================
+     APP
+=========================================== -->
+
+<div class="app">
+
+
+    <!-- ======================================
+         SIDEBAR
+    ======================================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            StudyFlow
+        </div>
+
+
+        <nav class="navigation">
+
+            <button
+                class="nav-button active"
+                data-page="dashboard"
+            >
+                <span>🏠</span>
+                Dashboard
+            </button>
+
+
+            <button
+                class="nav-button"
+                data-page="study"
+            >
+                <span>⏱</span>
+                Study
+            </button>
+
+
+            <button
+                class="nav-button"
+                data-page="statistics"
+            >
+                <span>📊</span>
+                Statistics
+            </button>
+
+
+            <button
+                class="nav-button"
+                data-page="calendar"
+            >
+                <span>📅</span>
+                Calendar
+            </button>
+
+
+            <button
+                class="nav-button"
+                data-page="friends"
+            >
+                <span>👥</span>
+                Friends
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <button class="settings">
+                ⚙
+                <span>Settings</span>
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ======================================
+         MAIN CONTENT
+    ======================================= -->
+
+    <main class="main-content">
+
+
+        <!-- ======================================
+             DASHBOARD
+        ======================================= -->
+
+        <section
+            class="page active"
+            id="dashboard-page"
+        >
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        Good afternoon 👋
+                    </h1>
+
+                    <p>
+                        Ready to get some studying done?
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-grid">
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        Today's study time
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="dashboard-total"
+                    >
+                        00:00:00
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        This week
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="dashboard-week"
+                    >
+                        00:00:00
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        Daily average
+                    </div>
+
+                    <div
+                        class="summary-value"
+                        id="dashboard-average"
+                    >
+                        00:00:00
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="timer-card">
+
+                <div class="timer-label">
+                    Today's study time • 00:00:00
+                </div>
+
+
+                <div class="current-subject">
+                    No subject selected
+                </div>
+
+
+                <div class="timer">
+                    00:00:00
+                </div>
+
+
+                <div class="timer-buttons">
+
+                    <button class="start-button">
+                        Start Studying
+                    </button>
+
+
+                    <button class="pause-button">
+                        Pause
+                    </button>
+
+
+                    <button class="finish-button">
+                        Finish Session
+                    </button>
+
+                </div>
+
+
+                <button class="manual-button">
+                    + Add Study Time Manually
+                </button>
+
+            </div>
+
+
+
+            <div class="section-header">
+
+                <div class="section-title">
+                    My Subjects
+                </div>
+
+
+                <button
+                    class="add-subject-button"
+                    id="dashboard-add-subject"
+                >
+                    + Add Subject
+                </button>
+
+            </div>
+
+
+            <div
+                class="subjects"
+                id="subject-list"
+            ></div>
+
+
+            <div class="history-section">
+
+                <div class="section-title">
+                    Recent Study Days
+                </div>
+
+
+                <div class="history-card">
+
+                    <div
+                        class="history-list"
+                        id="history-list"
+                    >
+
+                        <div class="empty-history">
+                            No previous study days yet.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ======================================
+             STUDY PAGE
+        ======================================= -->
+
+        <section
+            class="page"
+            id="study-page"
+        >
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        Study
+                    </h1>
+
+                    <p>
+                        Start a focused study session.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="study-page-card">
+
+                <div class="current-subject large">
+                    No subject selected
+                </div>
+
+
+                <div class="timer large-timer">
+                    00:00:00
+                </div>
+
+
+                <div class="timer-buttons">
+
+                    <button class="start-button">
+                        Start Studying
+                    </button>
+
+
+                    <button class="pause-button">
+                        Pause
+                    </button>
+
+
+                    <button class="finish-button">
+                        Finish Session
+                    </button>
+
+                </div>
+
+
+                <button class="manual-button">
+                    + Add Study Time Manually
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ======================================
+             STATISTICS PAGE
+        ======================================= -->
+
+        <section
+            class="page"
+            id="statistics-page"
+        >
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        Statistics
+                    </h1>
+
+                    <p>
+                        See how consistently you've been studying.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        This week
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="stat-week-total"
+                    >
+                        00:00:00
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        Daily average
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="stat-daily-average"
+                    >
+                        00:00:00
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        Best day
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="stat-best-day"
+                    >
+                        00:00:00
+                    </div>
+
+
+                    <div
+                        class="stat-small"
+                        id="stat-best-date"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="stats-panel">
+
+                <div class="panel-title">
+                    Study time this week
+                </div>
+
+
+                <div
+                    class="weekly-chart"
+                    id="weekly-chart"
+                ></div>
+
+            </div>
+
+
+            <div class="stats-panel">
+
+                <div class="panel-title">
+                    Subject breakdown
+                </div>
+
+
+                <div
+                    class="subject-breakdown"
+                    id="subject-breakdown"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ======================================
+             CALENDAR PAGE
+        ======================================= -->
+
+        <section
+            class="page"
+            id="calendar-page"
+        >
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        Calendar
+                    </h1>
+
+                    <p>
+                        Explore your study history day by day.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="calendar-layout">
+
+
+                <div class="calendar-panel">
+
+
+                    <div class="calendar-toolbar">
+
+                        <button
+                            class="calendar-nav-button"
+                            id="previous-month"
+                        >
+                            ‹
+                        </button>
+
+
+                        <div
+                            class="calendar-month-title"
+                        >
+                            August 2026
+                        </div>
+
+
+                        <button
+                            class="calendar-nav-button"
+                            id="next-month"
+                        >
+                            ›
+                        </button>
+
+                    </div>
+
+
+                    <div class="calendar-toolbar-bottom">
+
+                        <button
+                            class="today-button"
+                            id="today-button"
+                        >
+                            Today
+                        </button>
+
+                    </div>
+
+
+                    <div class="calendar-weekdays">
+
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                        <div>Sun</div>
+
+                    </div>
+
+
+                    <div
+                        class="calendar-grid"
+                        id="calendar-grid"
+                    ></div>
+
+
+                    <div class="calendar-legend">
+
+                        <span>
+                            Less
+                        </span>
+
+
+                        <span class="legend-box intensity-0"></span>
+                        <span class="legend-box intensity-1"></span>
+                        <span class="legend-box intensity-2"></span>
+                        <span class="legend-box intensity-3"></span>
+                        <span class="legend-box intensity-4"></span>
+
+
+                        <span>
+                            More
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="calendar-detail-panel">
+
+                    <div class="calendar-detail-header">
+
+                        <div class="panel-title">
+                            Selected day
+                        </div>
+
+
+                        <div
+                            class="selected-day-badge hidden"
+                            id="selected-day-badge"
+                        >
+                            Today
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="selected-date"
+                        id="selected-date"
+                    >
+                        Today
+                    </div>
+
+
+                    <div
+                        class="selected-total"
+                        id="selected-total"
+                    >
+                        00:00:00
+                    </div>
+
+
+                    <div class="selected-label">
+                        Total study time
+                    </div>
+
+
+                    <div
+                        class="calendar-subjects"
+                        id="calendar-subjects"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ======================================
+             FRIENDS PAGE
+        ======================================= -->
+
+        <section
+            class="page"
+            id="friends-page"
+        >
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        Friends
+                    </h1>
+
+                    <p>
+                        See what your friends are studying.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="friends-top-grid">
+
+
+                <!-- MY PROFILE -->
+
+                <div class="friends-profile-card">
+
+                    <div class="friends-card-label">
+                        Your profile
+                    </div>
+
+
+                    <div
+                        class="friends-profile-name"
+                        id="friends-profile-name"
+                    >
+                        Student
+                    </div>
+
+
+                    <div
+                        class="friends-profile-username"
+                        id="friends-profile-username"
+                    >
+                        @username
+                    </div>
+
+
+                    <div class="friend-code-box">
+
+                        <div class="friend-code-label">
+                            Your friend code
+                        </div>
+
+
+                        <div class="friend-code-row">
+
+                            <div
+                                class="friend-code"
+                                id="my-friend-code"
+                            >
+                                --------
+                            </div>
+
+
+                            <button
+                                class="copy-code-button"
+                                id="copy-friend-code"
+                            >
+                                Copy
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ADD FRIEND -->
+
+                <div class="add-friend-card">
+
+                    <div class="friends-card-label">
+                        Add a friend
+                    </div>
+
+
+                    <div class="friends-card-title">
+                        Enter their friend code
+                    </div>
+
+
+                    <p class="friends-card-description">
+                        Send a request and study together.
+                    </p>
+
+
+                    <div class="add-friend-row">
+
+                        <input
+                            type="text"
+                            id="friend-code-input"
+                            placeholder="e.g. DFB062C1"
+                            maxlength="8"
+                            autocomplete="off"
+                        >
+
+
+                        <button
+                            class="add-friend-button"
+                            id="add-friend-button"
+                        >
+                            Add
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="friends-form-message"
+                        id="friend-form-message"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FRIEND REQUESTS -->
+
+            <div
+                class="friends-section"
+                id="friend-requests-section"
+            >
+
+                <div class="section-header">
+
+                    <div class="section-title">
+                        Friend requests
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="friend-requests-list"
+                    id="friend-requests-list"
+                >
+
+                    <div class="friends-empty">
+                        No pending friend requests.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FRIEND LIST -->
+
+            <div class="friends-section">
+
+                <div class="section-header">
+
+                    <div class="section-title">
+                        Your friends
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="friends-list"
+                    id="friends-list"
+                >
+
+                    <div class="friends-empty">
+                        You haven't added any friends yet.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- ==========================================
+     SUBJECT SELECTION MODAL
+=========================================== -->
+
+<div class="subject-modal">
+
+    <div class="modal-box">
+
+        <h2>
+            What are you studying?
+        </h2>
+
+
+        <p
+            id="subject-modal-description"
+        >
+            Choose a subject to start your session.
+        </p>
+
+
+        <div
+            id="subject-selection-list"
+        ></div>
+
+
+        <button
+            class="modal-secondary-button"
+            id="modal-add-subject"
+        >
+            + Add New Subject
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==========================================
+     ADD SUBJECT MODAL
+=========================================== -->
+
+<div class="add-subject-modal">
+
+    <div class="modal-box">
+
+        <h2>
+            Add a Subject
+        </h2>
+
+
+        <p>
+            Give your subject a name.
+        </p>
+
+
+        <label for="new-subject-name">
+            Subject name
+        </label>
+
+
+        <input
+            type="text"
+            id="new-subject-name"
+            maxlength="50"
+            placeholder="e.g. Physics"
+            autocomplete="off"
+        >
+
+
+        <div
+            class="form-error"
+            id="subject-form-error"
+        ></div>
+
+
+        <div class="modal-actions">
+
+            <button
+                class="close-add-subject"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                class="save-subject"
+            >
+                Add Subject
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==========================================
+     MANUAL TIME MODAL
+=========================================== -->
+
+<div class="manual-modal">
+
+    <div class="modal-box">
+
+        <h2>
+            Add Study Time
+        </h2>
+
+
+        <p>
+            Enter time you already studied.
+        </p>
+
+
+        <label for="manual-subject">
+            Subject
+        </label>
+
+
+        <select
+            id="manual-subject"
+        ></select>
+
+
+        <div class="time-inputs">
+
+
+            <div>
+
+                <label for="manual-hours">
+                    Hours
+                </label>
+
+
+                <input
+                    type="number"
+                    id="manual-hours"
+                    min="0"
+                    max="999"
+                    placeholder="0"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label for="manual-minutes">
+                    Minutes
+                </label>
+
+
+                <input
+                    type="number"
+                    id="manual-minutes"
+                    min="0"
+                    max="59"
+                    placeholder="0"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button class="close-manual">
+                Cancel
+            </button>
+
+
+            <button class="save-manual">
+                Add Time
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==========================================
+     SCRIPTS
+=========================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-client.js"></script>
+
+<script src="app.js"></script>
+
+<script src="friends-live.js"></script>
+
+
+</body>
+
+</html>
