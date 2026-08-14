@@ -19,25 +19,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build StudyFlow
-        run: npx electron-builder --win
-
-      - name: Show build files
-        shell: powershell
-        run: Get-ChildItem -Path dist
-
-      - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            dist/StudyFlow-Setup-*.exe
-            dist/StudyFlow-Setup-*.exe.blockmap
-            dist/latest.yml
+      - name: Build and publish
+        run: npx electron-builder --win --publish always
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
