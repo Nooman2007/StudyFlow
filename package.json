@@ -1,6 +1,6 @@
 {
   "name": "studyflow",
-  "version": "1.7.4",
+  "version": "1.7.5",
   "description": "A desktop study tracker",
   "main": "main.js",
   "scripts": {
