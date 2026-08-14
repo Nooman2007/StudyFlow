@@ -1026,6 +1026,13 @@ button {
 .intensity-4 {
     background: #7087a7;
 }
+.intensity-3 .calendar-day-number,
+.intensity-3 .calendar-day-total,
+.intensity-4 .calendar-day-number,
+.intensity-4 .calendar-day-total {
+    color: #0f1117;
+    font-weight: 700;
+}
 
 
 .calendar-legend {
