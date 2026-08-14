@@ -1,33 +1,46 @@
 {
   "name": "studyflow",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "A desktop study tracker",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "release": "electron-builder --publish always"
   },
   "keywords": [
     "study",
     "productivity",
     "student"
   ],
-  "author": "",
+  "author": "Nooman2007",
   "license": "ISC",
   "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nooman2007/StudyFlow.git"
+  },
   "devDependencies": {
     "electron": "^43.0.0",
     "electron-builder": "^26.0.20"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.112.3",
+    "electron-updater": "^6.8.9"
   },
   "build": {
     "appId": "com.studyflow.app",
     "productName": "StudyFlow",
     "win": {
       "target": "nsis"
-    }
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.112.3",
-    "electron-updater": "^6.8.9"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Nooman2007",
+        "repo": "StudyFlow",
+        "releaseType": "release"
+      }
+    ]
   }
 }
