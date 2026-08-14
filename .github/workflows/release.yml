@@ -13,20 +13,31 @@ jobs:
     runs-on: windows-latest
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build and publish
-        run: npx electron-builder --win --publish always
+      - name: Build StudyFlow
+        run: npx electron-builder --win
+
+      - name: Show build files
+        shell: powershell
+        run: Get-ChildItem -Path dist
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/StudyFlow-Setup-*.exe
+            dist/StudyFlow-Setup-*.exe.blockmap
+            dist/latest.yml
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
