@@ -63,6 +63,13 @@ let bootInProgress = false;
 let subjects = [];
 
 let studySessions = [];
+// ============================================================
+// APP LIMITS
+// ============================================================
+
+const MAX_SUBJECTS = 10;
+const MAX_MANUAL_ENTRY_SECONDS = 12 * 60 * 60; // 12 hours
+const MAX_DAILY_SECONDS = 24 * 60 * 60;        // 24 hours
 
 
 // ============================================================
@@ -1389,6 +1396,23 @@ function openAddSubjectModal() {
     newSubjectInput.value =
         "";
 
+
+    if (
+        subjects.length >=
+        MAX_SUBJECTS
+    ) {
+
+        subjectFormError.textContent =
+            `You can have a maximum of ${MAX_SUBJECTS} subjects. Delete a subject before adding another.`;
+
+        addSubjectModal.classList.add(
+            "show"
+        );
+
+        return;
+    }
+
+
     addSubjectModal.classList.add(
         "show"
     );
@@ -1416,6 +1440,16 @@ function closeAddSubjectModal() {
 
 
 async function addNewSubject() {
+     if (
+        subjects.length >=
+        MAX_SUBJECTS
+    ) {
+
+        subjectFormError.textContent =
+            `You can have a maximum of ${MAX_SUBJECTS} subjects. Delete a subject before adding another.`;
+
+        return;
+    }
 
     if (!currentUser) {
 
@@ -2587,112 +2621,8 @@ async function finishStudySession() {
 }
 
 
-// ============================================================
-// ACTIVE SESSION CREATION
-// ============================================================
-
-async function createActiveSession() {
-
-    if (
-        !currentUser ||
-        !currentSubjectId ||
-        !sessionStartedAt
-    ) {
-
-        return false;
-    }
 
 
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("active_sessions")
-            .upsert(
-                {
-
-                    user_id:
-                        currentUser.id,
-
-                    subject_id:
-                        currentSubjectId,
-
-                    status:
-                        "active",
-
-                    started_at:
-                        new Date(
-                            sessionStartedAt
-                        ).toISOString(),
-
-                    accumulated_seconds:
-                        0,
-
-                    updated_at:
-                        new Date().toISOString()
-
-                },
-                {
-                    onConflict:
-                        "user_id"
-                }
-            );
-
-
-    if (error) {
-
-        console.error(
-            "Could not create active session:",
-            error
-        );
-
-        return false;
-    }
-
-
-    return true;
-}
-
-
-// ============================================================
-// CLEAR ACTIVE SESSION
-// ============================================================
-
-async function clearActiveSession() {
-
-    if (
-        !currentUser
-    ) {
-
-        return false;
-    }
-
-
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("active_sessions")
-            .delete()
-            .eq(
-                "user_id",
-                currentUser.id
-            );
-
-
-    if (error) {
-
-        console.error(
-            "Could not clear active session:",
-            error
-        );
-
-        return false;
-    }
-
-
-    return true;
-}
 
 
 // ============================================================
@@ -2854,6 +2784,20 @@ function openManualModal(
         "";
 
 
+    // Limit the manual entry fields.
+    manualHours.min =
+        "0";
+
+    manualHours.max =
+        "12";
+
+    manualMinutes.min =
+        "0";
+
+    manualMinutes.max =
+        "59";
+
+
     manualModal.classList.add(
         "show"
     );
@@ -2938,21 +2882,65 @@ saveManualButton.addEventListener(
 
 
         const secondsToAdd =
-            (
-                hours * 3600
-            ) +
-            (
-                minutes * 60
-            );
+    (
+        hours * 3600
+    ) +
+    (
+        minutes * 60
+    );
 
 
-        if (
-            secondsToAdd <= 0
-        ) {
+if (
+    secondsToAdd <= 0
+) {
 
-            return;
-        }
+    return;
+}
 
+
+if (
+    secondsToAdd >
+    MAX_MANUAL_ENTRY_SECONDS
+) {
+
+    alert(
+        "You can add a maximum of 12 hours at a time."
+    );
+
+    return;
+}
+const todayTotal =
+    getTotalToday();
+
+
+const remainingToday =
+    MAX_DAILY_SECONDS -
+    todayTotal;
+
+
+if (
+    remainingToday <= 0
+) {
+
+    alert(
+        "You have already reached the 24-hour study-time limit for today."
+    );
+
+    return;
+}
+
+
+if (
+    secondsToAdd >
+    remainingToday
+) {
+
+    alert(
+        `You can add at most ${formatTime(remainingToday)} more today.`
+    );
+
+    return;
+}
 
         saveManualButton.disabled =
             true;
