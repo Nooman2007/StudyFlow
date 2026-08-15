@@ -276,10 +276,13 @@
 
         <div class="sidebar-bottom">
 
-            <button class="settings">
-                ⚙
-                <span>Settings</span>
-            </button>
+            <button
+    class="nav-button settings"
+    data-page="settings"
+>
+    <span>⚙</span>
+    Settings
+</button>
 
         </div>
 
@@ -1071,6 +1074,144 @@
             </div>
 
         </section>
+        <!-- ======================================
+     SETTINGS
+======================================= -->
+
+<section
+    class="page"
+    id="settings-page"
+>
+
+    <div class="page-header">
+        <div>
+            <h1>Settings</h1>
+
+            <p>
+                Manage your StudyFlow account.
+            </p>
+        </div>
+    </div>
+
+
+    <div class="settings-page-content">
+
+        <!-- ACCOUNT -->
+
+        <div class="settings-card">
+
+            <div class="settings-card-header">
+
+                <div>
+                    <h2>Account</h2>
+
+                    <p>
+                        Your StudyFlow account information.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="account-info">
+
+                <div class="account-info-row">
+
+                    <div class="account-info-label">
+                        Name
+                    </div>
+
+                    <div
+                        class="account-info-value"
+                        id="settings-display-name"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="account-info-row">
+
+                    <div class="account-info-label">
+                        Username
+                    </div>
+
+                    <div
+                        class="account-info-value"
+                        id="settings-username"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="account-info-row">
+
+                    <div class="account-info-label">
+                        Email
+                    </div>
+
+                    <div
+                        class="account-info-value"
+                        id="settings-email"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="account-info-row">
+
+                    <div class="account-info-label">
+                        Friend code
+                    </div>
+
+                    <div
+                        class="account-info-value"
+                        id="settings-friend-code"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCOUNT ACTIONS -->
+
+        <div class="settings-card">
+
+            <div class="settings-card-header">
+
+                <div>
+                    <h2>Account actions</h2>
+
+                    <p>
+                        Manage your StudyFlow session.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <button
+                class="settings-logout-button"
+                id="settings-logout-button"
+            >
+                Log Out
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
 
 
     </main>

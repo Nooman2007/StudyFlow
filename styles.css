@@ -2384,3 +2384,121 @@ button {
     }
 
 }
+
+/* ==========================================
+   SETTINGS
+========================================== */
+
+.settings-page-content {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 850px;
+}
+
+
+.settings-card {
+    background: #181b24;
+    border-radius: 18px;
+    padding: 24px;
+}
+
+
+.settings-card-header {
+    margin-bottom: 22px;
+}
+
+
+.settings-card-header h2 {
+    margin: 0 0 6px;
+    font-size: 18px;
+}
+
+
+.settings-card-header p {
+    margin: 0;
+    color: #8991a4;
+    font-size: 13px;
+}
+
+
+.account-info {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.account-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    padding: 15px 0;
+    border-bottom: 1px solid #292e3a;
+}
+
+
+.account-info-row:first-child {
+    padding-top: 0;
+}
+
+
+.account-info-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+
+.account-info-label {
+    color: #8991a4;
+    font-size: 13px;
+}
+
+
+.account-info-value {
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+
+
+.settings-logout-button {
+    border: none;
+    background: #32242a;
+    color: #d88b8b;
+    padding: 11px 17px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.settings-logout-button:hover {
+    background: #452b32;
+}
+
+
+.settings-logout-button:disabled {
+    opacity: .6;
+    cursor: wait;
+}
+
+
+/* SETTINGS RESPONSIVE */
+
+@media (max-width: 600px) {
+
+    .account-info-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+
+    .account-info-value {
+        text-align: left;
+    }
+
+}

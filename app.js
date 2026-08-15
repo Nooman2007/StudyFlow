@@ -340,6 +340,69 @@ const subjectList =
 const historyList =
     document.querySelector("#history-list");
 
+    const settingsDisplayName =
+    document.querySelector("#settings-display-name");
+
+const settingsUsername =
+    document.querySelector("#settings-username");
+
+const settingsEmail =
+    document.querySelector("#settings-email");
+
+const settingsFriendCode =
+    document.querySelector("#settings-friend-code");
+
+const settingsLogoutButton =
+    document.querySelector("#settings-logout-button");
+
+    settingsLogoutButton.addEventListener(
+    "click",
+    async () => {
+
+        if (!currentUser) {
+            return;
+        }
+
+        settingsLogoutButton.disabled =
+            true;
+
+        settingsLogoutButton.textContent =
+            "Logging out...";
+
+        try {
+
+            const {
+                error
+            } =
+                await supabaseClient.auth.signOut();
+
+            if (error) {
+
+                console.error(
+                    "Could not log out:",
+                    error
+                );
+
+                alert(
+                    "Could not log out. Please try again."
+                );
+
+                return;
+            }
+
+        } finally {
+
+            settingsLogoutButton.disabled =
+                false;
+
+            settingsLogoutButton.textContent =
+                "Log Out";
+
+        }
+
+    }
+);
+
 
 const calendarGrid =
     document.querySelector("#calendar-grid");
@@ -4634,6 +4697,28 @@ async function loadMyProfile() {
     myFriendCode.textContent =
         data.friend_code ||
         "--------";
+            // SETTINGS PROFILE
+   if (settingsDisplayName) {
+    settingsDisplayName.textContent =
+        data.display_name || "—";
+}
+
+if (settingsUsername) {
+    settingsUsername.textContent =
+        data.username
+            ? "@" + data.username
+            : "—";
+}
+
+if (settingsFriendCode) {
+    settingsFriendCode.textContent =
+        data.friend_code || "—";
+}
+
+if (settingsEmail) {
+    settingsEmail.textContent =
+        currentUser.email || "—";
+}
 }
 
 
