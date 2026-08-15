@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog } = require("electron");
+const { app, BrowserWindow, dialog, Menu } = require("electron");
 const { autoUpdater } = require("electron-updater");
 
 function createWindow() {
@@ -94,10 +94,27 @@ function setupAutoUpdater() {
 
 
 // ============================================================
+// SEPARATE TEST USER DATA
+// ============================================================
+
+if (!app.isPackaged) {
+    app.setPath(
+        "userData",
+        `${app.getPath("userData")}-test`
+    );
+}
+console.log(
+    "StudyFlow TEST userData:",
+    app.getPath("userData")
+);
+
+// ============================================================
 // APP START
 // ============================================================
 
 app.whenReady().then(() => {
+
+    Menu.setApplicationMenu(null);
 
     createWindow();
 
