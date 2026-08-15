@@ -1059,17 +1059,37 @@ async function loadAllCloudSessions(
 
 async function createActiveSession() {
 
+    console.log(
+        "CREATE ACTIVE SESSION CALLED",
+        {
+            userId:
+                currentUser?.id,
+
+            subjectId:
+                currentSubjectId,
+
+            sessionStartedAt:
+                sessionStartedAt
+        }
+    );
+
+
     if (
         !currentUser ||
         !currentSubjectId ||
         !sessionStartedAt
     ) {
 
+        console.error(
+            "ACTIVE SESSION BLOCKED: missing state"
+        );
+
         return false;
     }
 
 
     const {
+        data,
         error
     } =
         await supabaseClient
@@ -1101,7 +1121,17 @@ async function createActiveSession() {
                     onConflict:
                         "user_id"
                 }
-            );
+            )
+            .select();
+
+
+    console.log(
+        "ACTIVE SESSION UPSERT RESULT",
+        {
+            data,
+            error
+        }
+    );
 
 
     if (error) {
