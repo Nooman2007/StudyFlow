@@ -71,6 +71,87 @@ const MAX_SUBJECTS = 10;
 const MAX_MANUAL_ENTRY_SECONDS = 12 * 60 * 60; // 12 hours
 const MAX_DAILY_SECONDS = 24 * 60 * 60;        // 24 hours
 
+// ============================================================
+// APP VERSION / WHAT'S NEW
+// ============================================================
+
+const APP_VERSION = "1.8.7";
+
+const WHATS_NEW_STORAGE_KEY =
+    "studyflow_seen_version";
+
+    // ============================================================
+// WHAT'S NEW
+// ============================================================
+
+const whatsNewModal =
+    document.querySelector(
+        "#whats-new-modal"
+    );
+
+const whatsNewCloseButton =
+    document.querySelector(
+        "#whats-new-close"
+    );
+
+
+function showWhatsNewIfNeeded() {
+
+    if (
+        !whatsNewModal
+    ) {
+
+        return;
+    }
+
+
+    const seenVersion =
+        localStorage.getItem(
+            WHATS_NEW_STORAGE_KEY
+        );
+
+
+    if (
+        seenVersion ===
+        APP_VERSION
+    ) {
+
+        return;
+    }
+
+
+    whatsNewModal.classList.add(
+        "show"
+    );
+
+}
+
+
+function closeWhatsNew() {
+
+    whatsNewModal.classList.remove(
+        "show"
+    );
+
+
+    localStorage.setItem(
+        WHATS_NEW_STORAGE_KEY,
+        APP_VERSION
+    );
+
+}
+
+
+if (
+    whatsNewCloseButton
+) {
+
+    whatsNewCloseButton.addEventListener(
+        "click",
+        closeWhatsNew
+    );
+
+}
 
 // ============================================================
 // ACTIVE TIMER STATE
@@ -955,6 +1036,10 @@ async function bootCloudApp(
 
 
         updateAllViews();
+        setTimeout(
+    showWhatsNewIfNeeded,
+    350
+);
 
     } finally {
 
@@ -1481,26 +1566,6 @@ function renderSubjects() {
 // ADD SUBJECT
 // ============================================================
 
-function showModal(modal) {
-
-    if (!modal) {
-        return;
-    }
-
-    modal.classList.remove("show");
-
-    requestAnimationFrame(() => {
-
-        requestAnimationFrame(() => {
-
-            modal.classList.add("show");
-
-        });
-
-    });
-
-}
-
 function openAddSubjectModal() {
 
     subjectFormError.textContent =
@@ -1545,10 +1610,9 @@ function openAddSubjectModal() {
 
 function closeAddSubjectModal() {
 
-    showModal(
-    addSubjectModal
+    addSubjectModal.classList.remove(
+    "show"
 );
-
 }
 
 
@@ -2324,11 +2388,13 @@ function openSubjectSelection() {
 
     renderSubjectSelection();
 
-    showModal(
-    subjectModal
-);
+    subjectModal.classList.add(
+        "show"
+    );
 
 }
+
+
 
 
 startButtons.forEach(
@@ -2911,9 +2977,9 @@ function openManualModal(
         "59";
 
 
-    showModal(
-    manualModal
-);;
+    manualModal.classList.add(
+    "show"
+);
 
 }
 
