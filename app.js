@@ -1481,6 +1481,26 @@ function renderSubjects() {
 // ADD SUBJECT
 // ============================================================
 
+function showModal(modal) {
+
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.remove("show");
+
+    requestAnimationFrame(() => {
+
+        requestAnimationFrame(() => {
+
+            modal.classList.add("show");
+
+        });
+
+    });
+
+}
+
 function openAddSubjectModal() {
 
     subjectFormError.textContent =
@@ -1525,9 +1545,9 @@ function openAddSubjectModal() {
 
 function closeAddSubjectModal() {
 
-    addSubjectModal.classList.remove(
-        "show"
-    );
+    showModal(
+    addSubjectModal
+);
 
 }
 
@@ -2304,9 +2324,9 @@ function openSubjectSelection() {
 
     renderSubjectSelection();
 
-    subjectModal.classList.add(
-        "show"
-    );
+    showModal(
+    subjectModal
+);
 
 }
 
@@ -2891,9 +2911,9 @@ function openManualModal(
         "59";
 
 
-    manualModal.classList.add(
-        "show"
-    );
+    showModal(
+    manualModal
+);;
 
 }
 
