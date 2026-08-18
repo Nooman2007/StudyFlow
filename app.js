@@ -163,7 +163,11 @@ let sessionStartedAt = null;
 
 let timerInterval = null;
 
-let isRunning = false;
+let activeSessionRetryTimer = null;
+
+let activeSessionGeneration = 0;
+
+let isRunning = false;;
 
 
 // ============================================================
@@ -1020,15 +1024,7 @@ async function bootCloudApp(
         }
 
 
-        /*
-         * If the app was reopened while an
-         * active session still exists, remove
-         * that stale live row for now.
-         *
-         * Later we'll build proper recovery.
-         */
-
-        await clearActiveSession();
+        
 
 
         appBooted =
@@ -1236,64 +1232,233 @@ async function createActiveSession() {
     }
 
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("active_sessions")
-            .upsert(
+    /*
+     * Try several times immediately.
+     *
+     * This protects against temporary network /
+     * Supabase failures when the user presses Start.
+     */
+
+    const maxAttempts = 3;
+
+
+    for (
+        let attempt = 1;
+        attempt <= maxAttempts;
+        attempt++
+    ) {
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("active_sessions")
+                    .upsert(
+                        {
+                            user_id:
+                                currentUser.id,
+
+                            subject_id:
+                                currentSubjectId,
+
+                            status:
+                                "active",
+
+                            started_at:
+                                new Date(
+                                    sessionStartedAt
+                                ).toISOString(),
+
+                            accumulated_seconds:
+                                0,
+
+                            updated_at:
+                                new Date().toISOString()
+                        },
+                        {
+                            onConflict:
+                                "user_id"
+                        }
+                    )
+                    .select();
+
+
+            console.log(
+                "ACTIVE SESSION UPSERT RESULT",
                 {
-                    user_id:
-                        currentUser.id,
-
-                    subject_id:
-                        currentSubjectId,
-
-                    status:
-                        "active",
-
-                    started_at:
-                        new Date(
-                            sessionStartedAt
-                        ).toISOString(),
-
-                    accumulated_seconds:
-                        0,
-
-                    updated_at:
-                        new Date().toISOString()
-
-                },
-                {
-                    onConflict:
-                        "user_id"
+                    attempt,
+                    data,
+                    error
                 }
-            )
-            .select();
+            );
 
 
-    console.log(
-        "ACTIVE SESSION UPSERT RESULT",
-        {
-            data,
-            error
+            if (!error) {
+
+                console.log(
+                    "ACTIVE SESSION CREATED SUCCESSFULLY."
+                );
+
+                return true;
+            }
+
+
+            console.error(
+                `Could not create active session (attempt ${attempt}/${maxAttempts}):`,
+                error
+            );
+
+        } catch (error) {
+
+            console.error(
+                `Active session request failed (attempt ${attempt}/${maxAttempts}):`,
+                error
+            );
+
         }
-    );
 
 
-    if (error) {
+        /*
+         * Small delay before the next immediate retry.
+         */
 
-        console.error(
-            "Could not create active session:",
-            error
-        );
+        if (
+            attempt < maxAttempts
+        ) {
 
-        return false;
+            await new Promise(
+                resolve =>
+                    setTimeout(
+                        resolve,
+                        1000
+                    )
+            );
+
+        }
+
     }
 
 
-    return true;
+    return false;
+}
+
+function startActiveSessionRetry() {
+
+    if (
+        activeSessionRetryTimer
+    ) {
+
+        return;
+    }
+
+
+    const generation =
+        activeSessionGeneration;
+
+
+    activeSessionRetryTimer =
+        setInterval(
+            async () => {
+
+                /*
+                 * The study session that created this
+                 * retry loop must still be the current one.
+                 */
+
+                if (
+                    generation !==
+                    activeSessionGeneration
+                ) {
+
+                    stopActiveSessionRetry();
+
+                    return;
+                }
+
+
+                if (
+                    !isRunning ||
+                    !currentUser ||
+                    !currentSubjectId ||
+                    !sessionStartedAt
+                ) {
+
+                    return;
+                }
+
+
+                const success =
+                    await createActiveSession();
+
+
+                /*
+                 * The user may have finished the session
+                 * while the Supabase request was running.
+                 *
+                 * Never recreate the live row for an
+                 * old session.
+                 */
+
+                if (
+                    generation !==
+                    activeSessionGeneration
+                ) {
+
+                    return;
+                }
+
+
+                if (
+                    !isRunning ||
+                    !currentSubjectId ||
+                    !sessionStartedAt
+                ) {
+
+                    return;
+                }
+
+
+                if (
+                    success
+                ) {
+
+                    clearInterval(
+                        activeSessionRetryTimer
+                    );
+
+                    activeSessionRetryTimer =
+                        null;
+
+                    console.log(
+                        "Active session successfully restored."
+                    );
+
+                }
+
+            },
+            5000
+        );
+
+}
+
+
+function stopActiveSessionRetry() {
+
+    if (
+        activeSessionRetryTimer
+    ) {
+
+        clearInterval(
+            activeSessionRetryTimer
+        );
+
+        activeSessionRetryTimer =
+            null;
+    }
+
 }
 
 
@@ -2535,6 +2700,8 @@ async function startStudySession(
     isRunning =
         true;
 
+        activeSessionGeneration++;
+
 
     currentSubjectDisplays.forEach(
         display => {
@@ -2590,18 +2757,31 @@ async function startStudySession(
 
 
     const activeCreated =
-        await createActiveSession();
+    await createActiveSession();
 
 
-    if (
-        !activeCreated
-    ) {
+if (
+    !activeCreated
+) {
 
-        console.warn(
-            "Timer is running locally, but the live session could not be uploaded."
-        );
+    console.warn(
+        "Timer is running locally, but the live session could not be uploaded. Retrying automatically..."
+    );
 
-    }
+    startActiveSessionRetry();
+
+} else {
+
+    /*
+     * The initial upload succeeded.
+     * No background retry is necessary.
+     */
+
+    stopActiveSessionRetry();
+
+    activeSessionGeneration++;
+
+}
 
 }
 
@@ -2631,6 +2811,8 @@ async function finishStudySession() {
 
         return;
     }
+     
+    stopActiveSessionRetry();
 
 
     const subjectId =
@@ -2809,6 +2991,10 @@ async function finishStudySession() {
 // ============================================================
 
 function resetTimerState() {
+
+    stopActiveSessionRetry();
+
+    activeSessionGeneration++;
 
     clearInterval(
         timerInterval
